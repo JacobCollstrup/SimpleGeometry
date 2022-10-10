@@ -7,11 +7,12 @@ namespace SimpleGeometry
         public Point2d start;
         public Point2d end;
 
-
-        public Line2d()
-        {
-
-        }
+        //Det er en dårlig ide at have en tom constructor her.
+        //En constructor skal helst sørge for at initialisere objektet
+        //så det er i en gyldig tilstand.
+        //Hvis man bruger den tomme constructor og direkte derefter
+        //kalder Length() eller Azimuth vil du få en null-pointer.
+        
         public Line2d(Point2d start, Point2d end)
         {
             this.start = start;
@@ -27,8 +28,9 @@ namespace SimpleGeometry
 
         public double Azimuth()
         {
-            double azimuth = Math.Atan((end.X - start.X) / (end.Y - start.Y));
-            return azimuth*200/Math.PI;
+            //Renamed local variable since it's only part of the azimuth calculation
+            double atan = Math.Atan((end.X - start.X) / (end.Y - start.Y));
+            return atan*200/Math.PI; //Shouldn't it be 180 rather than 200?
         }
     }
 }

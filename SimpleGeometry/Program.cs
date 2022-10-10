@@ -9,18 +9,17 @@ namespace SimpleGeometry
         {
             Console.WriteLine("Hello World!");
 
-            Point2d p1 = new Point2d();
-            p1.X = 100.00;
-            p1.Y = 100.00;
-
+            //Had to change this since I removed the empty constructor
+            //100f is shorthand for 100float and is equivalent to 100.00
+            Point2d p1 = new Point2d(100f, 100f);          
             Point2d p2 = new Point2d(200.00, 100.00);
 
-            Console.WriteLine(String.Format("The coordinates of the point p1 is {0}, {1}.", p1.X, p1.Y));
-            Console.WriteLine(String.Format("The coordinates of the point p2 is {0}, {1}.", p2.X, p2.Y));
+            //Changed to use string interpolation rather than format
+            //since it is much more readable IMO
+            Console.WriteLine($"The coordinates of the point p1 is {p1.X}, {p1.Y}.");
+            Console.WriteLine($"The coordinates of the point p2 is {p2.X}, {p2.Y}.");
 
-            Line2d line1 = new Line2d();
-            line1.start = p1;
-            line1.end = p2;
+            Line2d line1 = new Line2d(p1, p2);            
 
             double lengthLine1 = line1.Length();
             double azimuthLine1 = line1.Azimuth();
@@ -35,19 +34,24 @@ namespace SimpleGeometry
             var pFive = new Point2d(4.00, 1.60);
             var pSix = new Point2d(1.90, 1.00);
 
-            var listOfPoints = new List<Point2d>();
-            listOfPoints.Add(pOne);
-            listOfPoints.Add(pTwo);
-            listOfPoints.Add(pThree);
-            listOfPoints.Add(pFour);
-            listOfPoints.Add(pFive);
-            listOfPoints.Add(pSix);
-   
+            //Simplified list initialization
+            var listOfPoints = new List<Point2d>
+            {
+                pOne,
+                pTwo,
+                pThree,
+                pFour,
+                pFive,
+                pSix
+            };
+
             var polygon = new Polygon2d(listOfPoints);
             var area = polygon.Area();
             var circ = polygon.Circumference();
-            Console.WriteLine(String.Format("The area of the polygon is: {0}", area));
-            Console.WriteLine(String.Format("The circumference of the polygon is: {0}", circ));
+
+            //Converted to interpolation
+            Console.WriteLine($"The area of the polygon is: {area}");
+            Console.WriteLine($"The circumference of the polygon is: {circ}");
         }
     }
 }

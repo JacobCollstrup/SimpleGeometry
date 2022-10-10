@@ -9,10 +9,8 @@ namespace SimpleGeometry
         public double X;
         public double Y;
 
-        public Point2d()
-        {
+        //Se kommentar i line2d ang. tom constructor
 
-        }
         public Point2d(double X, double Y)
         {
             this.X = X;

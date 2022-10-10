@@ -6,20 +6,27 @@ namespace SimpleGeometry
 {
     class Polygon2d : BaseGeometry
     {
-        public List<Line2d> LineSegments = new List<Line2d>();
-        public List<Point2d> Vertices = new List<Point2d>();
+        //Made setter private, we don't want external code updating our lines or vertices
+        //Since we can't ensure it is a valid polygon if they do.
+        public List<Line2d> LineSegments { get; private set; } = new List<Line2d>();
+        public List<Point2d> Vertices { get; private set; } = new List<Point2d>();
         private int numLines;
         private int numPoints;
 
         public Polygon2d(List<Line2d> Lines)
         {
-            if (Lines.Count < 3)
+            //Added null-check so we don't get a null pointer exception if constructor is called with lines=null
+            //Lines?.Count < 3 is shorthand for lines != null && lines.Count < 3
+            if (Lines?.Count < 3)
             {
-                throw new Exception("Please supply 3 or more lines for generating polygon.");
+                //Updated to use more specific exception type
+                throw new ArgumentException("Please supply 3 or more lines for generating polygon.");
             }
+
             LineSegments = Lines;
-            foreach (var line in Lines) // Filling Vertices list, for use with calculating area
+            foreach (var line in Lines) // Filling Vertices list, for use with calculating area            
             {
+                //Won't we get a lot of duplicates since line[0].end == line[1].start, line[1].end == line[2].start, ...?
                 Vertices.Add(line.start);
                 Vertices.Add(line.end);
             }
@@ -28,11 +35,12 @@ namespace SimpleGeometry
 
         public Polygon2d(List<Point2d> Points)
         {
-            if (Points.Count < 3)
+            //Same changes as in other constructor
+            if (Points?.Count < 3)
             {
-
-                throw new Exception("Please supply 3 or more points for generating polygon.");
+                throw new ArgumentException("Please supply 3 or more points for generating polygon.");
             }
+
             Vertices = Points;
             int i = 1;
             while (i < Points.Count) // Filling LineSegment list, for use with calculating circumference
@@ -44,9 +52,10 @@ namespace SimpleGeometry
                 }
                 var line = new Line2d(Points[i - 1], Points[i]);
                 LineSegments.Add(line);
-                i++;
-                numPoints = Vertices.Count;
+                i++;                
             }
+            //Moved assignment out of loop
+            numPoints = Vertices.Count;
         }
 
         public double Circumference()
@@ -67,6 +76,8 @@ namespace SimpleGeometry
             
             Console.WriteLine(numPoints);
 
+            //Du brugte en while-løkke i din punktbaserede constructor, men her bruger du en for.
+            //Begge dele er fint, men det er generelt en god ide at være stilmæssigt konsekvent.
             double area = 0;
             for (int i = 0; i < numPoints; i++)
             {
